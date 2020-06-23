@@ -1,52 +1,55 @@
 window.SailTrack = class SailTrack {
     constructor(webId) {
-        // If no id is passed generate a unique one
-        if (!webId) {
-            webId = Math.random().toString(36).substr(2, 9);
+        // Check if any wid cookie is already present
+        const widCookie = document.cookie ?
+            document.cookie.split('; ')
+                .find(row => row.startsWith('wid'))
+                .split('=')[1] : '';
+        if (widCookie) { // A cookie is present        
+            // Check if webid has been passed
+            if (webId) { // A webid has been passed
+                // Check if cookie value is the same as passed webId
+                if (widCookie !== webId) { // Cookie value and passed webId are not the same
+                    // Update the cookie with the new webId
+                    this.createCookie(webId)
+                }
+            } else { // No webid has been passed
+                // Asign value of webId to value of widCookie
+                webId = widCookie;
+            }
+        } else { // No cookie present
+            // Check if webId has been passed
+            if (webId) { // A webId has been passed
+                // Create a cookie with the passed webId
+                this.createCookie(webId)
+            } else { // A webId was not passed
+                // Create cookie with a random unique ID
+                webId = Math.random().toString(36).substr(2, 9);
+                this.createCookie(webId)
+            }
         }
-        this.webId = webId;
+
+        this.webId = webId; // A string uniqie to every user
         this.currentUrl = window.location.href; // Current url that user is on
+        this.startTime = new Date();
         this.deviceInfo = this.getDeviceInfo(); // Object that holds information about users device
 
-        // Save unique user id in a cookie
+        this.capturePageView() // Send a request on every load
 
-        this.newPageView() // Send a request on every load
     }
 
-    // getBrowser() {
-    //     // Function for getting browser name
-    //     // https://developer.mozilla.org/en-US/docs/Web/API/Window/navigator
-    //     const userAgentObj = navigator.userAgent;
-    //     let currentBrowser;
+    capturePageView() {
+        // Function for sending information to server on each new page load
+        window.addEventListener("unload", () => {
+            console.log(`send a req and stop timer ${(new Date() - this.startTime) / 1000}`)
+        })
+    }
 
-    //     // The order matters here, and this may report false positives for unlisted browsers.
-    //     if (userAgentObj.indexOf("Firefox") > -1) {
-    //         currentBrowser = "Mozilla Firefox";
-    //         // "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
-    //     } else if (userAgentObj.indexOf("SamsungBrowser") > -1) {
-    //         currentBrowser = "Samsung Internet";
-    //         // "Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G955F Build/PPR1.180610.011) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/9.4 Chrome/67.0.3396.87 Mobile Safari/537.36
-    //     } else if (userAgentObj.indexOf("Opera") > -1 || userAgentObj.indexOf("OPR") > -1) {
-    //         currentBrowser = "Opera";
-    //         // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 OPR/57.0.3098.106"
-    //     } else if (userAgentObj.indexOf("Trident") > -1) {
-    //         currentBrowser = "Microsoft Internet Explorer";
-    //         // "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; Zoom 3.6.0; wbx 1.0.0; rv:11.0) like Gecko"
-    //     } else if (userAgentObj.indexOf("Edge") > -1) {
-    //         currentBrowser = "Microsoft Edge";
-    //         // "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299"
-    //     } else if (userAgentObj.indexOf("Chrome") > -1) {
-    //         currentBrowser = "Google Chrome"; // Or chromium
-    //         // "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/66.0.3359.181 Chrome/66.0.3359.181 Safari/537.36"
-    //     } else if (userAgentObj.indexOf("Safari") > -1) {
-    //         currentBrowser = "Apple Safari";
-    //         // "Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1 980x1306"
-    //     } else {
-    //         currentBrowser = "unknown";
-    //     }
-
-    //     return currentBrowser;
-    // }
+    captureEvent(eventObj) {
+        // Track events by providing...
+        console.log(`User: ${this.webId}`)
+        console.log(eventObj)
+    }
 
     getDeviceSpecs() {
         // Function that gets information about users device. 
@@ -203,20 +206,14 @@ window.SailTrack = class SailTrack {
             browser,
             os,
             // language: ?
-            userTime: new Date(),
         }
     }
 
-    newPageView() {
-        // Function for sending information to server on each new page load
-        console.log(this.webId)
-        console.log(this.deviceInfo)
-    }
-
-    sendEvent(eventObj) {
-        // Track events by providing...
-        console.log(`User: ${this.webId}`)
-        console.log(eventObj)
+    createCookie(cvalue) {
+        // Save unique user id in a cookie
+        const CookieExpires = new Date;
+        CookieExpires.setFullYear(CookieExpires.getFullYear() + 1); // Expire cookie in one year
+        document.cookie = `wid=${cvalue}; expires=${CookieExpires}; path=/; samesite=strict`;
     }
 }
 
