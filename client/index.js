@@ -1,11 +1,5 @@
 // Script that creates an iframe for tracking
 
-// // Polyfill
-// document.currentScript = document.currentScript || (() => {
-//     const scripts = document.getElementsByTagName('script');
-//     return scripts[scripts.length - 1];
-// })();
-
 document.addEventListener('DOMContentLoaded', () => {
     // Get script tag by id
     const currentScript = document.getElementById('sailnear-js')
