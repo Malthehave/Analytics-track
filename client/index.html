@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie tracking</title>
+    <script src="./index.js" id="sailnear-js" wid="malthehm"></script>
+    <script src="track.js"></script>
+    <script>
+        const TrackSession = new SailTrack();
+    </script>
+</head>
+
+<body>
+    <h1>Welcome to my Ecommerce site</h1>
+    <h2>We sell all kinds of cookies</h2>
+
+    <div>
+        <div style="text-align: center;">
+            <img src="./cookie.png" alt="Cookie" height="200">
+            <h3>Chocolate Cookie</h3>
+            <a href="/cookie1.html">Learn More</a>
+        </div>
+    </div>
+    <button onclick="buttonClick()">
+        Click me
+    </button>
+
+    <script>
+        function buttonClick() {
+            window.location.href = "/basket.html";
+        }
+
+        window.addEventListener('unload', function (event) {
+            console.log('I am the 3rd one.');
+        });
+    </script>
+
+</body>
+
+</html>
