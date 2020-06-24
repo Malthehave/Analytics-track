@@ -30,35 +30,51 @@ window.SailTrack = class SailTrack {
         }
 
         this.webId = webId; // A string uniqie to every user
-        this.currentUrl = window.location.href; // Current url that user is on
+        this.currentUrl = location.pathname; // Current url that user is on
         this.startTime = new Date();
         this.deviceInfo = this.getDeviceInfo(); // Object that holds information about users device
 
-        this.capturePageView() // Send a request on every load
-
+        // this.capturePageView() // Send a request on every class init
+        // Listen to when the user unloads a page and call the capturePageView function
+        window.addEventListener("unload", () => {
+            this.capturePageView()
+        })
     }
 
     capturePageView() {
         // Function for sending information to server on each new page load
-        window.addEventListener("unload", () => {
-            console.log(`send a req and stop timer ${(new Date() - this.startTime) / 1000}`)
-        })
+        navigator.sendBeacon(
+            "http://localhost:3000/",
+            JSON.stringify(this.getInfoToSend())
+        );
+        // Update the currentUrl in case of client side rendering
+        this.currentUrl = location.pathname;
     }
 
     captureEvent(eventObj) {
-        // Track events by providing...
+        // Track events by providing an event object
         console.log(`User: ${this.webId}`)
         console.log(eventObj)
     }
 
-    getDeviceSpecs() {
-        // Function that gets information about users device. 
-        // Returns OS and Browser
+    getInfoToSend() {
+        // A helper function
+        // Returns an object with the needed information ready to send to server
+        return {
+            webId: this.webId,
+            timeSpent: (new Date() - this.startTime) / 1000,
+            currentUrl: this.currentUrl,
+            deviceInfo: this.deviceInfo,
+        }
+    }
+
+    getDeviceInfo() {
+        // Functin to get information about device
+        // Returns width, height browser and operating system
         // https://stackoverflow.com/a/18706818/8691718
         const unknown = '-';
 
         // Detect browser
-        const nVer = navigator.appVersion;
         const nAgt = navigator.userAgent;
         let browser = navigator.appName;
         let version = '' + parseFloat(navigator.appVersion);
@@ -175,31 +191,9 @@ window.SailTrack = class SailTrack {
             // osVersion = /Windows (.*)/.exec(os)[1];
             os = 'Windows';
         }
-
-        // switch (os) {
-        //     case 'Mac OS X':
-        //         osVersion = /Mac OS X (10[\.\_\d]+)/.exec(nAgt)[1];
-        //         break;
-
-        //     case 'Android':
-        //         osVersion = /Android ([\.\_\d]+)/.exec(nAgt)[1];
-        //         break;
-
-        //     case 'iOS':
-        //         osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
-        //         osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
-        //         break;
-        // }
         // End of operating system detection
 
-        // Return all information
-        return { browser, os }
-    }
-
-    getDeviceInfo() {
-        // Functin to get information about device
-        // E.g. width, height and user agent
-        const { browser, os } = this.getDeviceSpecs()
+        // Return all gatherd information + width and height
         return {
             width: screen.width,
             height: screen.height,
@@ -210,6 +204,7 @@ window.SailTrack = class SailTrack {
     }
 
     createCookie(cvalue) {
+        // Helper function to create a cookie
         // Save unique user id in a cookie
         const CookieExpires = new Date;
         CookieExpires.setFullYear(CookieExpires.getFullYear() + 1); // Expire cookie in one year

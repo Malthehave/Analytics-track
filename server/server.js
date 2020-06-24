@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const { v4: uuidv4 } = require('uuid')
+const helmet = require('helmet')
 
 const mongoConfig = require('./mongo.config')
 
@@ -9,6 +10,9 @@ const app = express()
 const port = 3000
 app.use(cors())
 app.use(cookieParser())
+app.use(helmet())
+app.use(express.text())
+
 
 // EXAMPLE OF DATABASE STORE
 const userObj = []
@@ -44,6 +48,12 @@ app.get('/track', async (req, res) => {
         userAgent: req.header('User-Agent'),
         timestamp: Date.now()
     })
+})
+
+app.post('/', (req, res) => {
+    res.status(204).send("1")
+    console.log(req.body)
+    console.log("================================")
 })
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

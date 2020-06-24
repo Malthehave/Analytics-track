@@ -28,7 +28,13 @@
 
     <script>
         function buttonClick() {
-            window.location.href = "/basket.html";
+            const state = { 'page_id': 1, 'user_id': 5 }
+            const title = ''
+            const url = '/basket.html'
+
+            history.pushState(state, title, url)
+            // Capture a page view
+            TrackSession.capturePageView()
         }
     </script>
 
