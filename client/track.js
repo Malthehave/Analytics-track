@@ -1,21 +1,21 @@
 window.SailTrack = class SailTrack {
     constructor(webId) {
-        // Check if any wid cookie is already present
-        const widCookie = document.cookie ?
+        // Check if any webId cookie is already present
+        const webIdCookie = document.cookie ?
             document.cookie.split('; ')
-                .find(row => row.startsWith('wid'))
+                .find(row => row.startsWith('webId'))
                 .split('=')[1] : '';
-        if (widCookie) { // A cookie is present        
+        if (webIdCookie) { // A cookie is present
             // Check if webid has been passed
             if (webId) { // A webid has been passed
                 // Check if cookie value is the same as passed webId
-                if (widCookie !== webId) { // Cookie value and passed webId are not the same
+                if (webIdCookie !== webId) { // Cookie value and passed webId are not the same
                     // Update the cookie with the new webId
                     this.createCookie(webId)
                 }
             } else { // No webid has been passed
-                // Asign value of webId to value of widCookie
-                webId = widCookie;
+                // Asign value of webId to value of webIdCookie
+                webId = webIdCookie;
             }
         } else { // No cookie present
             // Check if webId has been passed
@@ -30,11 +30,11 @@ window.SailTrack = class SailTrack {
         }
 
         this.webId = webId; // A string uniqie to every user
+        this.rootUrl = location.hostname; // The root of the url "musaeus.dk"
         this.currentUrl = location.pathname; // Current url that user is on
         this.startTime = new Date();
         this.deviceInfo = this.getDeviceInfo(); // Object that holds information about users device
 
-        // this.capturePageView() // Send a request on every class init
         // Listen to when the user unloads a page and call the capturePageView function
         window.addEventListener("unload", () => {
             this.capturePageView()
@@ -44,7 +44,7 @@ window.SailTrack = class SailTrack {
     capturePageView() {
         // Function for sending information to server on each new page load
         navigator.sendBeacon(
-            "http://localhost:3000/",
+            "http://localhost:3000/capture/",
             JSON.stringify(this.getInfoToSend())
         );
         // Update the currentUrl in case of client side rendering
@@ -53,7 +53,17 @@ window.SailTrack = class SailTrack {
 
     captureEvent(eventObj) {
         // Track events by providing an event object
+        // Object should include:
+        // eventCategory: required
+        // eventValue: optional
+        if (!eventObj) return console.warn("An event object is required");
         console.log(`User: ${this.webId}`)
+        eventObj.webId = this.webId
+        eventObj.timeStamp = new Date()
+        const { rootUrl, currentUrl } = this.getInfoToSend()
+        eventObj.rootUrl = rootUrl
+        eventObj.currentUrl = currentUrl
+        // Add event value if provided:
         console.log(eventObj)
     }
 
@@ -63,6 +73,7 @@ window.SailTrack = class SailTrack {
         return {
             webId: this.webId,
             timeSpent: (new Date() - this.startTime) / 1000,
+            rootUrl: this.rootUrl,
             currentUrl: this.currentUrl,
             deviceInfo: this.deviceInfo,
         }
@@ -95,12 +106,12 @@ window.SailTrack = class SailTrack {
         }
         // Edge
         else if ((verOffset = nAgt.indexOf('Edge')) != -1) {
-            browser = 'Microsoft Edge';
+            browser = 'Edge';
             version = nAgt.substring(verOffset + 5);
         }
         // MSIE
         else if ((verOffset = nAgt.indexOf('MSIE')) != -1) {
-            browser = 'Microsoft Internet Explorer';
+            browser = 'Internet Explorer';
             version = nAgt.substring(verOffset + 5);
         }
         // Chrome
@@ -123,16 +134,17 @@ window.SailTrack = class SailTrack {
         }
         // MSIE 11+
         else if (nAgt.indexOf('Trident/') != -1) {
-            browser = 'Microsoft Internet Explorer';
+            browser = 'Internet Explorer';
             version = nAgt.substring(nAgt.indexOf('rv:') + 3);
         }
         // Other browsers
         else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) < (verOffset = nAgt.lastIndexOf('/'))) {
-            browser = nAgt.substring(nameOffset, verOffset);
+            // browser = nAgt.substring(nameOffset, verOffset);
+            browser = 'Other'
             version = nAgt.substring(verOffset + 1);
-            if (browser.toLowerCase() == browser.toUpperCase()) {
-                browser = navigator.appName;
-            }
+            // if (browser.toLowerCase() == browser.toUpperCase()) {
+            //     browser = navigator.appName;
+            // }
         }
         // trim the version string
         if ((ix = version.indexOf(';')) != -1) version = version.substring(0, ix);
@@ -154,15 +166,7 @@ window.SailTrack = class SailTrack {
             { s: 'Windows 8', r: /(Windows 8|Windows NT 6.2)/ },
             { s: 'Windows 7', r: /(Windows 7|Windows NT 6.1)/ },
             { s: 'Windows Vista', r: /Windows NT 6.0/ },
-            { s: 'Windows Server 2003', r: /Windows NT 5.2/ },
             { s: 'Windows XP', r: /(Windows NT 5.1|Windows XP)/ },
-            { s: 'Windows 2000', r: /(Windows NT 5.0|Windows 2000)/ },
-            { s: 'Windows ME', r: /(Win 9x 4.90|Windows ME)/ },
-            { s: 'Windows 98', r: /(Windows 98|Win98)/ },
-            { s: 'Windows 95', r: /(Windows 95|Win95|Windows_95)/ },
-            { s: 'Windows NT 4.0', r: /(Windows NT 4.0|WinNT4.0|WinNT|Windows NT)/ },
-            { s: 'Windows CE', r: /Windows CE/ },
-            { s: 'Windows 3.11', r: /Win16/ },
             { s: 'Android', r: /Android/ },
             { s: 'Open BSD', r: /OpenBSD/ },
             { s: 'Sun OS', r: /SunOS/ },
@@ -208,14 +212,14 @@ window.SailTrack = class SailTrack {
         // Save unique user id in a cookie
         const CookieExpires = new Date;
         CookieExpires.setFullYear(CookieExpires.getFullYear() + 1); // Expire cookie in one year
-        document.cookie = `wid=${cvalue}; expires=${CookieExpires}; path=/; samesite=strict`;
+        document.cookie = `webId=${cvalue}; expires=${CookieExpires}; path=/; samesite=strict`;
     }
 }
 
 // const SailTrack = new SailTrack()
 
 // TrackSession.sendRequest()
-// TrackSession.sendEvent({
+// TrackSession.captureEvent({
 //     event: "shoe-size",
 //     value: 44
 // })

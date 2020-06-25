@@ -25,9 +25,12 @@
     <button onclick="buttonClick()">
         Click me
     </button>
-
+    <button onclick="eventTest()">
+        event test
+    </button>
     <script>
         function buttonClick() {
+            // Browser history api test
             const state = { 'page_id': 1, 'user_id': 5 }
             const title = ''
             const url = '/basket.html'
@@ -36,8 +39,14 @@
             // Capture a page view
             TrackSession.capturePageView()
         }
-    </script>
 
+        function eventTest() {
+            // event test
+            TrackSession.captureEvent({
+                
+            })
+        }
+    </script>
 </body>
 
 </html>
