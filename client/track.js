@@ -44,11 +44,12 @@ window.SailTrack = class SailTrack {
     capturePageView() {
         // Function for sending information to server on each new page load
         navigator.sendBeacon(
-            "http://localhost:3000/capture/",
+            "http://localhost:5000/capture/",
             JSON.stringify(this.getInfoToSend())
         );
-        // Update the currentUrl in case of client side rendering
+        // Update the currentUrl and startTime in case of client side rendering
         this.currentUrl = location.pathname;
+        this.startTime = new Date();
     }
 
     captureEvent(eventObj) {
@@ -81,7 +82,7 @@ window.SailTrack = class SailTrack {
 
     getDeviceInfo() {
         // Functin to get information about device
-        // Returns width, height browser and operating system
+        // Returns device type, browser and operating system
         // https://stackoverflow.com/a/18706818/8691718
         const unknown = '-';
 
@@ -197,10 +198,20 @@ window.SailTrack = class SailTrack {
         }
         // End of operating system detection
 
+        // Begin find device type
+        let deviceType = unknown;
+        if (screen.width <= 450) {
+            deviceType = 'Mobile';
+        } else if (screen.width <= 1100) {
+            deviceType = 'Tablet';
+        } else if (screen.width > 1101) {
+            deviceType = 'Desktop';
+        }
+        // End device type
+
         // Return all gatherd information + width and height
         return {
-            width: screen.width,
-            height: screen.height,
+            deviceType,
             browser,
             os,
             // language: ?
@@ -218,8 +229,8 @@ window.SailTrack = class SailTrack {
 
 // const SailTrack = new SailTrack()
 
-// TrackSession.sendRequest()
-// TrackSession.captureEvent({
+// SailTrack.sendRequest()
+// SailTrack.captureEvent({
 //     event: "shoe-size",
 //     value: 44
 // })
