@@ -1,35 +1,35 @@
 window.SailTrack = class SailTrack {
-    constructor(webId) {
-        // Check if any webId cookie is already present
-        const webIdCookie = document.cookie ?
+    constructor(sailId) {
+        // Check if any sailId cookie is already present
+        const sailIdCookie = document.cookie ?
             document.cookie.split('; ')
-                .find(row => row.startsWith('webId'))
+                .find(row => row.startsWith('sailId'))
                 .split('=')[1] : '';
-        if (webIdCookie) { // A cookie is present
-            // Check if webid has been passed
-            if (webId) { // A webid has been passed
-                // Check if cookie value is the same as passed webId
-                if (webIdCookie !== webId) { // Cookie value and passed webId are not the same
-                    // Update the cookie with the new webId
-                    this.createCookie(webId)
+        if (sailIdCookie) { // A cookie is present
+            // Check if sailId has been passed
+            if (sailId) { // A sailId has been passed
+                // Check if cookie value is the same as passed sailId
+                if (sailIdCookie !== sailId) { // Cookie value and passed sailId are not the same
+                    // Update the cookie with the new sailId
+                    this.createCookie(sailId)
                 }
-            } else { // No webid has been passed
-                // Asign value of webId to value of webIdCookie
-                webId = webIdCookie;
+            } else { // No sailId has been passed
+                // Asign value of sailId to value of sailIdCookie
+                sailId = sailIdCookie;
             }
         } else { // No cookie present
-            // Check if webId has been passed
-            if (webId) { // A webId has been passed
-                // Create a cookie with the passed webId
-                this.createCookie(webId)
-            } else { // A webId was not passed
+            // Check if sailId has been passed
+            if (sailId) { // A sailId has been passed
+                // Create a cookie with the passed sailId
+                this.createCookie(sailId)
+            } else { // A sailId was not passed
                 // Create cookie with a random unique ID
-                webId = Math.random().toString(36).substr(2, 9);
-                this.createCookie(webId)
+                sailId = Math.random().toString(36).substr(2, 9);
+                this.createCookie(sailId)
             }
         }
 
-        this.webId = webId; // A string uniqie to every user
+        this.sailId = sailId; // A string uniqie to every user
         this.rootUrl = location.hostname; // The root of the url "musaeus.dk"
         this.currentUrl = location.pathname; // Current url that user is on
         this.startTime = new Date();
@@ -58,7 +58,7 @@ window.SailTrack = class SailTrack {
         // eventCategory: required
         // eventValue: optional
         if (!eventObj) return console.warn("An event object is required");
-        eventObj.webId = this.webId
+        eventObj.sailId = this.sailId
         const { rootUrl, currentUrl } = this.getInfoToSend()
         eventObj.rootUrl = rootUrl
         eventObj.currentUrl = currentUrl
@@ -72,7 +72,7 @@ window.SailTrack = class SailTrack {
         // A helper function
         // Returns an object with the needed information ready to send to server
         return {
-            webId: this.webId,
+            sailId: this.sailId,
             timeSpent: (new Date() - this.startTime) / 1000,
             rootUrl: this.rootUrl,
             currentUrl: this.currentUrl,
@@ -223,7 +223,7 @@ window.SailTrack = class SailTrack {
         // Save unique user id in a cookie
         const CookieExpires = new Date;
         CookieExpires.setFullYear(CookieExpires.getFullYear() + 1); // Expire cookie in one year
-        document.cookie = `webId=${cvalue}; expires=${CookieExpires}; path=/; samesite=strict`;
+        document.cookie = `sailId=${cvalue}; expires=${CookieExpires}; path=/; samesite=strict`;
     }
 }
 
