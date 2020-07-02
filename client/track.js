@@ -1,10 +1,9 @@
 window.SailTrack = class SailTrack {
     constructor(sailId) {
         // Check if any sailId cookie is already present
-        const sailIdCookie = document.cookie ?
-            document.cookie.split('; ')
-                .find(row => row.startsWith('sailId'))
-                .split('=')[1] : '';
+        const sailIdCookie = document.cookie?.split('; ')
+            .find(row => row.startsWith('sailId'))
+            ?.split('=')[1];
         if (sailIdCookie) { // A cookie is present
             // Check if sailId has been passed
             if (sailId) { // A sailId has been passed
@@ -54,16 +53,17 @@ window.SailTrack = class SailTrack {
 
     captureEvent(eventObj) {
         // Track events by providing an event object
-        // Object should include:
+        // Object provided by user should include:
         // eventCategory: required
         // eventValue: optional
         if (!eventObj) return console.warn("An event object is required");
+        if (!eventObj.eventCategory) return console.warn("An eventCategory key is required");
         eventObj.sailId = this.sailId
         const { rootUrl, currentUrl } = this.getInfoToSend()
         eventObj.rootUrl = rootUrl
         eventObj.currentUrl = currentUrl
         navigator.sendBeacon(
-            "http://localhost:3000/capture/event",
+            "http://localhost:5000/capture/event",
             JSON.stringify(eventObj)
         );
     }
