@@ -58,8 +58,8 @@ window.SailTrack = class SailTrack {
         // eventValue: optional
         if (!eventObj) return console.warn("An event object is required");
         if (!eventObj.eventCategory) return console.warn("An eventCategory key is required");
-        eventObj.sailId = this.sailId
-        const { rootUrl, currentUrl } = this.getInfoToSend()
+        const { sailId, rootUrl, currentUrl } = this.getInfoToSend()
+        eventObj.sailId = sailId
         eventObj.rootUrl = rootUrl
         eventObj.currentUrl = currentUrl
         navigator.sendBeacon(
