@@ -7,7 +7,8 @@
     <title>Cookie tracking</title>
     <script src="track.js"></script>
     <script>
-        const TrackSession = new SailTrack();
+        const SailSession = new SailTrack();
+        console.log(SailSession.deviceInfo)
     </script>
 </head>
 
@@ -37,12 +38,12 @@
 
             history.pushState(state, title, url)
             // Capture a page view
-            TrackSession.capturePageView()
+            SailSession.capturePageView()
         }
 
         function eventTest() {
             // event test
-            TrackSession.captureEvent({
+            SailSession.captureEvent({
                 eventCategory: "shoeSize",
                 eventValue: 44
             })
