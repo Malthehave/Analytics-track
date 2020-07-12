@@ -1,5 +1,7 @@
 window.SailTrack = class SailTrack {
-    constructor(sailId) {
+    constructor(options) {
+        let { sailId, meta } = options
+
         // Check if any sailId cookie is already present
         const sailIdCookie = document.cookie?.split('; ')
             .find(row => row.startsWith('sailId'))
@@ -28,6 +30,7 @@ window.SailTrack = class SailTrack {
             }
         }
 
+        this.meta = meta; // Meta data (page categories)
         this.sailId = sailId; // A string uniqie to every user
         this.rootUrl = location.hostname; // The root of the url "musaeus.dk"
         this.currentUrl = location.pathname; // Current url that user is on
@@ -71,12 +74,13 @@ window.SailTrack = class SailTrack {
     getInfoToSend() {
         // A helper function
         // Returns an object with the needed information ready to send to server
-        return {
+        return {            
             sailId: this.sailId,
             timeSpent: (new Date() - this.startTime) / 1000,
             rootUrl: this.rootUrl,
             currentUrl: this.currentUrl,
             deviceInfo: this.deviceInfo,
+            meta: this.meta,
         }
     }
 

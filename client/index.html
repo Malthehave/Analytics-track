@@ -7,8 +7,12 @@
     <title>Cookie tracking</title>
     <script src="track.js"></script>
     <script>
-        const SailSession = new SailTrack();
-        console.log(SailSession.deviceInfo)
+        const SailSession = new SailTrack({
+            meta: {
+                categories: ["phones"]
+            }
+        });
+        // console.log(SailSession.deviceInfo) // Info about device that user can call
     </script>
 </head>
 
