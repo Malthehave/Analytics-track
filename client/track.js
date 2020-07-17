@@ -32,7 +32,7 @@ window.SailTrack = class SailTrack {
 
         this.meta = meta; // Meta data (page categories)
         this.sailId = sailId; // A string uniqie to every user
-        this.rootUrl = location.hostname; // The root of the url "musaeus.dk"
+        this.website = location.hostname; // The root of the url "musaeus.dk"
         this.currentUrl = location.pathname; // Current url that user is on
         this.startTime = new Date();
         this.deviceInfo = this.getDeviceInfo(); // Object that holds information about users device
@@ -61,9 +61,9 @@ window.SailTrack = class SailTrack {
         // eventValue: optional
         if (!eventObj) return console.warn("An event object is required");
         if (!eventObj.eventCategory) return console.warn("An eventCategory key is required");
-        const { sailId, rootUrl, currentUrl } = this.getInfoToSend()
+        const { sailId, website, currentUrl } = this.getInfoToSend()
         eventObj.sailId = sailId
-        eventObj.rootUrl = rootUrl
+        eventObj.website = website
         eventObj.currentUrl = currentUrl
         navigator.sendBeacon(
             "http://localhost:5000/capture/event",
@@ -77,7 +77,7 @@ window.SailTrack = class SailTrack {
         return {            
             sailId: this.sailId,
             timeSpent: (new Date() - this.startTime) / 1000,
-            rootUrl: this.rootUrl,
+            website: this.website,
             currentUrl: this.currentUrl,
             deviceInfo: this.deviceInfo,
             meta: this.meta,
