@@ -5,15 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookie tracking</title>
+    <link rel="stylesheet" href="style.css">
     <script src="track.js"></script>
     <script>
-        const SailSession = new SailTrack({
-            meta: {
-                categories: ["phones"]
-            }
-        });
+        const SailSession = new SailTrack({});
         // console.log(SailSession.deviceInfo) // Info about device that user can call
     </script>
+
+    <script src="simple.js"></script>
 </head>
 
 <body>
@@ -21,13 +20,37 @@
     <h2>We sell all kinds of cookies</h2>
 
     <div>
-        <div style="text-align: center;">
-            <img src="./cookie.png" alt="Cookie" height="200">
-            <h3>Chocolate Cookie</h3>
-            <a href="/cookie1.html">Learn More</a>
+        <div class="row">
+            <div class="column">
+                <img src="./cookie.png" alt="Cookie" height="200">
+                <h3>Chocolate Cookie</h3>
+                <a href="/cookie1.html">See More</a>
+
+            </div>
+            <div class="column">
+                <img src="./cookie.png" alt="Cookie" height="200">
+                <h3>Strawberry Cookie</h3>
+                <a href="/cookie2.html">See More</a>
+
+            </div>
+            <div class="column">
+                <img src="./cookie.png" alt="Cookie" height="200">
+                <h3>Blueberry Cookie</h3>
+                <a href="/cookie3.html">See More</a>
+            </div>
         </div>
     </div>
-    <button onclick="buttonClick()">
+
+    <h2>User is interested in:</h2>
+    <div id="categories"></div>
+
+
+    <hr>
+    <div id="browser"></div>
+    <div id="deviceType"></div>
+    <div id="os"></div>
+
+    <!-- <button onclick="buttonClick()">
         Click me
     </button>
     <button onclick="eventTest()">
@@ -52,7 +75,7 @@
                 eventValue: 44
             })
         }
-    </script>
+    </script> -->
 </body>
 
 </html>
