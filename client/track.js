@@ -61,10 +61,9 @@ window.SailTrack = class SailTrack {
         // eventValue: optional
         if (!eventObj) return console.warn("An event object is required");
         if (!eventObj.eventCategory) return console.warn("An eventCategory key is required");
-        const { sailId, website, currentUrl } = this.getInfoToSend()
+        const { sailId, website } = this.getInfoToSend()
         eventObj.sailId = sailId
         eventObj.website = website
-        eventObj.currentUrl = currentUrl
         navigator.sendBeacon(
             "http://localhost:5000/capture/event",
             JSON.stringify(eventObj)

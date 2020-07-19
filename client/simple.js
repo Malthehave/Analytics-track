@@ -8,7 +8,6 @@ window.addEventListener('load', function () {
     // Call API from here
     fetch('http://localhost:5000/api/localhost/Malthe', {
         headers: {
-            // 'Content-Type': 'application/json'
             'x-api-key': 'm20-go',
         },
     })
@@ -16,6 +15,8 @@ window.addEventListener('load', function () {
         .then(data => {
             console.log(data)
             document.getElementById('categories').innerHTML = data.categories[0]._id
+            document.getElementById('event').innerHTML = data.events[0]._id
+            document.getElementById('eventValue').innerHTML = data.events[0].average
         });
 })
 
