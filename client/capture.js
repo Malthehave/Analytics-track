@@ -230,10 +230,10 @@ window.SailTrack = class SailTrack {
     }
 }
 
-// const SailTrack = new SailTrack()
+// const SailSession = new SailTrack()
 
-// SailTrack.sendRequest()
-// SailTrack.captureEvent({
+// SailSession.sendRequest()
+// SailSession.captureEvent({
 //     event: "shoe-size",
 //     value: 44
 // })

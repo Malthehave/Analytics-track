@@ -8,7 +8,7 @@ window.addEventListener('load', function () {
     // Call API from here
     fetch('http://localhost:5000/api/localhost/Malthe', {
         headers: {
-            'x-api-key': 'm20-go',
+            'x-api-key': 'm20-go', // Example header
         },
     })
         .then(response => response.json())
