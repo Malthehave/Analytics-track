@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel index.html",
     "prebuild": "rm -rf dist",
-    "build": "parcel build capture.js --no-source-maps --detailed-report"
+    "build": "parcel build capture.js --out-file capture.min.js --no-source-maps --detailed-report"
   },
   "keywords": [],
   "author": "",
