@@ -46,7 +46,7 @@ window.SailTrack = class SailTrack {
     capturePageView() {
         // Function for sending information to server on each new page load
         navigator.sendBeacon(
-            "http://localhost:5000/capture/",
+            "https://api.sailnear.com/capture/",
             JSON.stringify(this.getInfoToSend())
         );
         // Update the currentUrl and startTime in case of client side rendering
@@ -65,7 +65,7 @@ window.SailTrack = class SailTrack {
         eventObj.sailId = sailId
         eventObj.website = website
         navigator.sendBeacon(
-            "http://localhost:5000/capture/event",
+            "https://api.sailnear.com/capture/event",
             JSON.stringify(eventObj)
         );
     }
