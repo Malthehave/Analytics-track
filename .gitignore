@@ -113,3 +113,7 @@ typings/
 .history
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,dotenv
+
+# Ignore everything in dist folder, except capture.min.js
+client/dist/*
+!client/dist/capture.min.js

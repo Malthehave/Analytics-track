@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookie tracking</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mvp.css">
     <script src="capture.js"></script>
     <script>
         const SailSession = new SailTrack({});
@@ -16,8 +17,25 @@
 </head>
 
 <body>
-    <h1>Welcome to my Ecommerce site</h1>
-    <h2>We sell all kinds of cookies</h2>
+    <header>
+        <section>
+            <nav>
+                <ul>
+                    <li>Home</li>
+                    <li><a href="/cookie1.html">Cookie 1</a></li>
+                    <li><a href="/cookie2.html">Cookie 2</a></li>
+                    <li><a href="/cookie3.html">Cookie 3</a></li>
+                    <li><a href="/shoe.html">Cookie Shoe</a></li>
+                </ul>
+            </nav>
+        </section>
+        <h1>Welcome to my Ecommerce site</h1>
+        <h2>We sell all kinds of <mark>cookies</mark></h2>
+        <br>
+        <p><a href="/shoe.html"><b>Get our cookie shoe →</b></a></p>
+    </header>
+
+
 
     <div>
         <div class="row">
@@ -47,15 +65,30 @@
         </div>
     </div>
 
+
     <h2>User is interested in:</h2>
     <div id="categories"></div>
 
+    <hr>
+    <section>
+        <table>
+            <thead>
+                <tr>
+                    <th>Browser</th>
+                    <th>Device Type</th>
+                    <th>OS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><div id="browser"></div></td>
+                    <td><div id="deviceType"></div></td>
+                    <td><div id="os"></div></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 
-    <hr>
-    <div id="browser"></div>
-    <div id="deviceType"></div>
-    <div id="os"></div>
-    <hr>
     <div id="event"></div>
     <div id="eventValue"></div>
 
