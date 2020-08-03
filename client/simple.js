@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            // console.log(data)
             document.getElementById('categories').innerHTML = data.categories[0]._id
             document.getElementById('event').innerHTML = data.events[0]._id
             document.getElementById('eventValue').innerHTML = data.events[0].average

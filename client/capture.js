@@ -1,6 +1,6 @@
 window.SailTrack = class SailTrack {
     constructor(options) {
-        let { sailId, meta } = options
+        let { sailId, email, meta } = options
 
         // Check if any sailId cookie is already present
         const sailIdCookie = document.cookie?.split('; ')
@@ -31,6 +31,10 @@ window.SailTrack = class SailTrack {
         }
 
         this.meta = meta; // Meta data (page categories)
+        this.email = email; // Meta data (page categories)
+        // if (email) {
+        //     this.email = email; // A string holding the email for the user. (Optional)
+        // }
         this.sailId = sailId; // A string uniqie to every user
         this.website = location.hostname; // The root of the url "musaeus.dk"
         this.currentUrl = location.pathname; // Current url that user is on
@@ -40,7 +44,10 @@ window.SailTrack = class SailTrack {
         // Listen to when the user unloads a page and call the capturePageView function
         window.addEventListener("unload", () => {
             this.capturePageView()
+            console.log("ss")
         })
+        console.log(this.deviceInfo)
+
     }
 
     capturePageView() {
@@ -73,8 +80,9 @@ window.SailTrack = class SailTrack {
     getInfoToSend() {
         // A helper function
         // Returns an object with the needed information ready to send to server
-        return {            
+        return {
             sailId: this.sailId,
+            email: this.email,
             timeSpent: (new Date() - this.startTime) / 1000,
             website: this.website,
             currentUrl: this.currentUrl,
